@@ -8,7 +8,7 @@
 import UIKit
 
 
-class ViewController: UIViewController, UITableViewDataSource {
+final class ViewController: UIViewController, UITableViewDataSource {
 
     
     private let searchBar = SearchBarView()
