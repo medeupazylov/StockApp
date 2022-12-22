@@ -1,56 +1,53 @@
 import UIKit
 
-class SearchBarView {
+final class SearchBarView {
     
     let seacrhBarView: UIView = {
         let seacrhView = UIView()
-        seacrhView.backgroundColor = .black
+        seacrhView.backgroundColor = .white
         seacrhView.translatesAutoresizingMaskIntoConstraints = false
         seacrhView.layer.cornerRadius = 25
-        
-        let innerView = UIView()
-        seacrhView.addSubview(innerView)
-        innerView.backgroundColor = .white
-        innerView.translatesAutoresizingMaskIntoConstraints = false
-        innerView.layer.cornerRadius = 24.5
-//        innerView.layer.borderWidth = 2.0
-//        innerView.layer.borderColor = UIColor.green.cgColor
-
-
-        
-        let searchIcon = UIImage(systemName: "magnifyingglass")
-        
-        let searchButton = UIButton()
-        searchButton.translatesAutoresizingMaskIntoConstraints = false
-        seacrhView.addSubview(searchButton)
-        searchButton.clipsToBounds = true
-        
-        
-        
-        let searchIconView = UIImageView(image: searchIcon!)
-        searchIconView.tintColor = .black
-        searchIconView.translatesAutoresizingMaskIntoConstraints = false
-        searchButton.addSubview(searchIconView)
-        
-        let searchTextField = UITextField()
-        searchTextField.attributedPlaceholder = NSAttributedString(string: "Find company or ticker", attributes: [NSAttributedString.Key.foregroundColor : UIColor.black,  NSAttributedString.Key.font : UIFont(name: "Montserrat-SemiBold", size: 16)!])
-        
-        //TODO: upload a new font and change the placeholder- Monteserrat
+        seacrhView.layer.borderWidth = 2.0
+        seacrhView.layer.borderColor = UIColor.black.cgColor
+        return seacrhView
+    } ()
     
-        
-        searchTextField.translatesAutoresizingMaskIntoConstraints = false
-        innerView.addSubview(searchTextField)
-        
+    let searchTextField: UITextField = {
+        let textField = UITextField()
+        textField.attributedPlaceholder = NSAttributedString(string: "Find company or ticker", attributes: [NSAttributedString.Key.foregroundColor : UIColor.black,  NSAttributedString.Key.font : MontserratFont.makefont(name: .semibold, size: 16)])
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    let searchButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.clipsToBounds = true
+        return button
+    }()
+    
+    
+    let searchIconView: UIImageView = {
+        let searchIcon = UIImage(systemName: "magnifyingglass")
+        let iconView = UIImageView(image: searchIcon!)
+        iconView.tintColor = .black
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        return iconView
+    } ()
+    
+    func addSubviews() {
+        searchButton.addSubview(searchIconView)
+        seacrhBarView.addSubview(searchTextField)
+        seacrhBarView.addSubview(searchButton)
+    }
+    
+    func setupLayout() {
         NSLayoutConstraint.activate([
-            innerView.topAnchor.constraint(equalTo: seacrhView.topAnchor, constant: 1),
-            innerView.heightAnchor.constraint(equalToConstant: 48),
-            innerView.leftAnchor.constraint(equalTo: seacrhView.leftAnchor, constant: 1),
-            innerView.rightAnchor.constraint(equalTo: seacrhView.rightAnchor, constant: -1),
             
             searchButton.heightAnchor.constraint(equalToConstant: 25),
             searchButton.widthAnchor.constraint(equalToConstant: 25),
-            searchButton.centerYAnchor.constraint(equalTo: innerView.centerYAnchor),
-            searchButton.leftAnchor.constraint(equalTo: innerView.leftAnchor, constant: 16),
+            searchButton.centerYAnchor.constraint(equalTo: seacrhBarView.centerYAnchor),
+            searchButton.leftAnchor.constraint(equalTo: seacrhBarView.leftAnchor, constant: 16),
             
             searchIconView.widthAnchor.constraint(equalTo: searchButton.widthAnchor),
             searchIconView.heightAnchor.constraint(equalTo: searchButton.heightAnchor),
@@ -60,9 +57,6 @@ class SearchBarView {
             
             
         ])
-        
-        
-        return seacrhView
-    } ()
+    }
     
 }

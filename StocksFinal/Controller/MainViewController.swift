@@ -1,39 +1,43 @@
-//
-//  ViewController.swift
-//  StocksFinal
-//
-//  Created by Medeu Pazylov on 16.12.2022.
-//
-
 import UIKit
 
 
-final class ViewController: UIViewController, UITableViewDataSource {
+final class MainViewController: UIViewController {
 
     
     private let searchBar = SearchBarView()
     private let label = LabelView()
-    private let tableView = UITableView()
+    
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
+    
+    
+    private let tableView : UITableView = {
+        let table = UITableView()
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.register(StockTableViewCell.self, forCellReuseIdentifier: "reusableCell")
+        return table
+    }()
+    
+    
+    func setupView() {
         view = UIView()
         view.backgroundColor = .white
-        
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        
-        
+        tableView.dataSource = self
+        addSubviews()
+        setupLayout()
+    }
+    
+    func addSubviews() {
         view.addSubview(searchBar.seacrhBarView)
         view.addSubview(label.labelView)
         view.addSubview(tableView)
-
-
-        
-        tableView.dataSource = self
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: "reusableCell")
-        
-       
-        
+        searchBar.addSubviews()
+    }
+    
+    func setupLayout() {
         NSLayoutConstraint.activate([
             searchBar.seacrhBarView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
             searchBar.seacrhBarView.widthAnchor.constraint(equalToConstant: 150),
@@ -41,7 +45,6 @@ final class ViewController: UIViewController, UITableViewDataSource {
             searchBar.seacrhBarView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
             searchBar.seacrhBarView.heightAnchor.constraint(equalToConstant: 50),
 
-            
             label.labelView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
             label.labelView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
             label.labelView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
@@ -51,23 +54,21 @@ final class ViewController: UIViewController, UITableViewDataSource {
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-        
         ])
         
-        
+        searchBar.setupLayout()
     }
-    
+}
+
+
+
+extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 20
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reusableCell", for: indexPath) as! TableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reusableCell", for: indexPath) as! StockTableViewCell
         return cell
     }
-
-
 }
-
-

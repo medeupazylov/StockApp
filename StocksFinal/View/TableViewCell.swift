@@ -1,23 +1,27 @@
 import UIKit
 
-class TableViewCell: UITableViewCell {
+final class StockTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        setupCell()
+        setupLayout()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    func setupCell() {
         self.contentView.addSubview(innerView)
-        
-
         innerView.addSubview(stockImageView)
-
-
-
+        innerView.addSubview(containerView)
         containerView.addSubview(stockLabel)
         containerView.addSubview(stockPrice)
         containerView.addSubview(stockName)
         containerView.addSubview(stockRate)
-        innerView.addSubview(containerView)
-        
-        
+    }
+    
+    func setupLayout() {
         NSLayoutConstraint.activate([
             self.contentView.heightAnchor.constraint(equalToConstant: 68),
             
@@ -46,10 +50,6 @@ class TableViewCell: UITableViewCell {
             
         ])
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
     
     let innerView: UIView = {
         let view = UIView()
@@ -59,8 +59,6 @@ class TableViewCell: UITableViewCell {
         view.layer.cornerRadius = 10
         return view
     } ()
-    
-   
     
     let stockImageView: UIImageView = {
         let img = UIImageView()
@@ -76,7 +74,8 @@ class TableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "AAPL"
-        label.font = UIFont(name: "Montserrat-Bold", size: 18)
+        label.font = MontserratFont.makefont(name: .bold, size: 18)
+        
         return label
     } ()
     
@@ -84,7 +83,7 @@ class TableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Apple Inc."
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
+        label.font = MontserratFont.makefont(name: .semibold, size: 12)
         return label
     } ()
     
@@ -92,7 +91,7 @@ class TableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "$999.9"
-        label.font = UIFont(name: "Montserrat-Bold", size: 18)
+        label.font = MontserratFont.makefont(name: .bold, size: 18)
         return label
     } ()
     
@@ -100,7 +99,7 @@ class TableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "+$0.00 (0.00%)"
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
+        label.font = MontserratFont.makefont(name: .semibold, size: 12)
         label.textColor = .init(red: 36/255, green: 179/255, blue: 93/255, alpha: 1.0)
         return label
     } ()

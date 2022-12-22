@@ -1,6 +1,6 @@
 import UIKit
 
-class LabelView {
+final class LabelView {
     let labelView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
