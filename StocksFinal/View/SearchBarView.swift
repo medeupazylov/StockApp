@@ -7,7 +7,7 @@ final class SearchBarView {
         seacrhView.backgroundColor = .white
         seacrhView.translatesAutoresizingMaskIntoConstraints = false
         seacrhView.layer.cornerRadius = 25
-        seacrhView.layer.borderWidth = 2.0
+        seacrhView.layer.borderWidth = 1.0
         seacrhView.layer.borderColor = UIColor.black.cgColor
         return seacrhView
     } ()

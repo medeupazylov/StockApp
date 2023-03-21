@@ -1,6 +1,8 @@
 import UIKit
 
 final class StockTableViewCell: UITableViewCell {
+    
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -9,6 +11,7 @@ final class StockTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        
     }
     
     func setupCell() {
@@ -19,16 +22,17 @@ final class StockTableViewCell: UITableViewCell {
         containerView.addSubview(stockPrice)
         containerView.addSubview(stockName)
         containerView.addSubview(stockRate)
+        containerView.addSubview(starButton)
     }
     
     func setupLayout() {
         NSLayoutConstraint.activate([
-            self.contentView.heightAnchor.constraint(equalToConstant: 68),
+            self.contentView.heightAnchor.constraint(equalToConstant: 76),
             
             innerView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20),
             innerView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -20),
             innerView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
-            innerView.heightAnchor.constraint(equalTo: self.contentView.heightAnchor),
+            innerView.heightAnchor.constraint(equalToConstant: 68),
             
             stockImageView.centerYAnchor.constraint(equalTo: innerView.centerYAnchor),
             stockImageView.leftAnchor.constraint(equalTo: innerView.leftAnchor, constant: 8),
@@ -44,6 +48,11 @@ final class StockTableViewCell: UITableViewCell {
             stockPrice.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -17),
             stockName.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             
+            starButton.leftAnchor.constraint(equalTo: stockLabel.rightAnchor, constant: 6),
+            starButton.heightAnchor.constraint(equalToConstant: 16),
+            starButton.widthAnchor.constraint(equalToConstant: 16),
+            starButton.centerYAnchor.constraint(equalTo: stockLabel.centerYAnchor),
+            
             stockRate.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             stockRate.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -12),
             
@@ -54,9 +63,8 @@ final class StockTableViewCell: UITableViewCell {
     let innerView: UIView = {
         let view = UIView()
         view.clipsToBounds = true
-        view.backgroundColor = .systemGray6
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 16
         return view
     } ()
     
@@ -68,6 +76,16 @@ final class StockTableViewCell: UITableViewCell {
         img.layer.cornerRadius = 15
         img.clipsToBounds = true
         return img
+    } ()
+    
+    let starButton: UIButton = {
+        let starIcon = UIImage(systemName: "star.fill")
+        let img = UIImage(systemName: "star.fill")
+        let button = UIButton()
+        button.setImage(starIcon, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor  = .systemYellow
+        return button
     } ()
     
     let stockLabel: UILabel = {

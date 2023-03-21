@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		DE0C5BA22954AA1700D12CDF /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0C5BA12954AA1700D12CDF /* MainViewController.swift */; };
 		DE0C5BA42954E5BC00D12CDF /* MontserratFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0C5BA32954E5BC00D12CDF /* MontserratFont.swift */; };
+		DE0C5BA6295756FD00D12CDF /* StockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0C5BA5295756FD00D12CDF /* StockData.swift */; };
+		DE0C5BA8295757D100D12CDF /* StockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0C5BA7295757D100D12CDF /* StockManager.swift */; };
+		DE0C5BAA2957587D00D12CDF /* stockProfiles.json in Resources */ = {isa = PBXBuildFile; fileRef = DE0C5BA92957587D00D12CDF /* stockProfiles.json */; };
+		DE0C5BAC29577B3400D12CDF /* StockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0C5BAB29577B3400D12CDF /* StockModel.swift */; };
 		DE4B975D2951D05B00FB15F4 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4B975C2951D05B00FB15F4 /* TableViewCell.swift */; };
 		DE4B976029523BC800FB15F4 /* Montserrat-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE4B975F29523BC800FB15F4 /* Montserrat-VariableFont_wght.ttf */; };
 		DE4B97622952427000FB15F4 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE4B97612952427000FB15F4 /* Montserrat-Medium.ttf */; };
@@ -20,11 +24,16 @@
 		DE8D5E71294C6C580018EAAA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE8D5E70294C6C580018EAAA /* SceneDelegate.swift */; };
 		DE8D5E78294C6C590018EAAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE8D5E77294C6C590018EAAA /* Assets.xcassets */; };
 		DE8D5E7B294C6C590018EAAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE8D5E79294C6C590018EAAA /* LaunchScreen.storyboard */; };
+		DEFD240E2958A04D0036C2E4 /* StockLiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFD240D2958A04D0036C2E4 /* StockLiveData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DE0C5BA12954AA1700D12CDF /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		DE0C5BA32954E5BC00D12CDF /* MontserratFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MontserratFont.swift; sourceTree = "<group>"; };
+		DE0C5BA5295756FD00D12CDF /* StockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockData.swift; sourceTree = "<group>"; };
+		DE0C5BA7295757D100D12CDF /* StockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockManager.swift; sourceTree = "<group>"; };
+		DE0C5BA92957587D00D12CDF /* stockProfiles.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = stockProfiles.json; sourceTree = "<group>"; };
+		DE0C5BAB29577B3400D12CDF /* StockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockModel.swift; sourceTree = "<group>"; };
 		DE4B975C2951D05B00FB15F4 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		DE4B975F29523BC800FB15F4 /* Montserrat-VariableFont_wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-VariableFont_wght.ttf"; sourceTree = "<group>"; };
 		DE4B97612952427000FB15F4 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
@@ -38,6 +47,7 @@
 		DE8D5E77294C6C590018EAAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE8D5E7A294C6C590018EAAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DE8D5E7C294C6C590018EAAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DEFD240D2958A04D0036C2E4 /* StockLiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockLiveData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +86,11 @@
 		DE4B97682952EC6800FB15F4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DE0C5BA92957587D00D12CDF /* stockProfiles.json */,
+				DE0C5BA5295756FD00D12CDF /* StockData.swift */,
+				DE0C5BA7295757D100D12CDF /* StockManager.swift */,
+				DE0C5BAB29577B3400D12CDF /* StockModel.swift */,
+				DEFD240D2958A04D0036C2E4 /* StockLiveData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -180,6 +195,7 @@
 			files = (
 				DE8D5E7B294C6C590018EAAA /* LaunchScreen.storyboard in Resources */,
 				DE4B976029523BC800FB15F4 /* Montserrat-VariableFont_wght.ttf in Resources */,
+				DE0C5BAA2957587D00D12CDF /* stockProfiles.json in Resources */,
 				DE4B9766295244BB00FB15F4 /* Montserrat-Bold.ttf in Resources */,
 				DE4B97622952427000FB15F4 /* Montserrat-Medium.ttf in Resources */,
 				DE8D5E78294C6C590018EAAA /* Assets.xcassets in Resources */,
@@ -194,10 +210,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEFD240E2958A04D0036C2E4 /* StockLiveData.swift in Sources */,
+				DE0C5BA6295756FD00D12CDF /* StockData.swift in Sources */,
 				DE0C5BA42954E5BC00D12CDF /* MontserratFont.swift in Sources */,
+				DE0C5BA8295757D100D12CDF /* StockManager.swift in Sources */,
 				DE4B976D2952ED4900FB15F4 /* SearchBarView.swift in Sources */,
 				DE4B975D2951D05B00FB15F4 /* TableViewCell.swift in Sources */,
 				DE8D5E6F294C6C580018EAAA /* AppDelegate.swift in Sources */,
+				DE0C5BAC29577B3400D12CDF /* StockModel.swift in Sources */,
 				DE8D5E71294C6C580018EAAA /* SceneDelegate.swift in Sources */,
 				DE4B976F2952EE1400FB15F4 /* LabelView.swift in Sources */,
 				DE0C5BA22954AA1700D12CDF /* MainViewController.swift in Sources */,
