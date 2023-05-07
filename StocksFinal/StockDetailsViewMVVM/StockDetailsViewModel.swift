@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 protocol StockDetailsViewModelOutput {
     func updateGraph(stockGraphData: StockGraphData)
@@ -54,18 +54,12 @@ class StockDetailsViewModel: StockDetailsViewModelProvider{
         }
         
         stockManager.performRequestGraphData(with: currentStockModel.ticker, period: period , completion: {  stockGraphData, error in
-        
             if error != nil { return }
             guard let stockGraphData = stockGraphData else {
                 print("THIS IS ERROR:")
                 return
             }
-
-            print(stockGraphData.closePrices.count)
-            DispatchQueue.main.async {
-                self.stockDetailsView?.updateGraph(stockGraphData: stockGraphData)
-            }
-            
+            self.stockDetailsView?.updateGraph(stockGraphData: stockGraphData)
         })
     }
     

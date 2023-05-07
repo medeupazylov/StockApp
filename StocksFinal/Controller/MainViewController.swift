@@ -11,12 +11,9 @@ enum StockTableViewState {
 final class MainViewController: UIViewController{
     
     private let stockManager: StockManager
-    private var mainModuleModel: MainModuleModel
-    
-    let defaults = UserDefaults.standard
+    private var mainViewModel: MainViewModelProvider
     
     var endEditing: Bool = true
-    
     
     var lastMainPageState: StockTableViewState = .stocks
     var currentState: StockTableViewState = .stocks {
@@ -27,11 +24,11 @@ final class MainViewController: UIViewController{
         }
     }
     
-    init(stockManager: StockManager, mainModel: MainModuleModel) {
+    init(stockManager: StockManager, mainViewModel: MainViewModelProvider) {
         
+        self.mainViewModel = mainViewModel
         self.stockManager = stockManager
-        self.mainModuleModel = mainModel
-        mainModuleModel.searchHistoryList = defaults.object(forKey: "searchHistory") as? [String] ?? []
+       
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,7 +50,7 @@ final class MainViewController: UIViewController{
     
     private func currentStateConfigurations() {
         stocksTableView.isHidden = (currentState != .search) ? false : true
-        if (currentState == .favorite && mainModuleModel.favouriteList.count == 0) { stocksTableView.isHidden = true }
+        if (currentState == .favorite && mainViewModel.getFavouriteListSize() == 0) { stocksTableView.isHidden = true }
         
         searchView.isHidden = currentState == .search ? false : true
         
@@ -61,7 +58,7 @@ final class MainViewController: UIViewController{
         searchBarView.backButton.isHidden = (currentState == .stocks || currentState == .favorite) ? true : false
         searchBarView.clearButton.isHidden = currentState == .searchStarted ? false : true
         
-        noElementLabel.isHidden = (currentState == .favorite && mainModuleModel.favouriteList.count == 0) ? false : true
+        noElementLabel.isHidden = (currentState == .favorite && mainViewModel.getFavouriteListSize() == 0) ? false : true
         
         stockButtonsView.stocksButton.isHidden = (currentState == .stocks || currentState == .favorite) ? false : true
         stockButtonsView.favourButton.isHidden = (currentState == .stocks || currentState == .favorite) ? false : true
@@ -72,59 +69,10 @@ final class MainViewController: UIViewController{
     
     
     private func setupStocksList() {
-        mainModuleModel.stocksList = stockManager.getStockProfiles()
-        
-        
-        let fetchingStocks = min(mainModuleModel.stocksList.count, 30)
-        for i in 0..<fetchingStocks {
-            let item = mainModuleModel.stocksList[i]
-            let stockLiveData = StockLiveData(currentPrice: defaults.double(forKey: "current_price_" + item.ticker ),
-                                              change: defaults.double(forKey: "change_" + item.ticker),
-                                              changePercent: defaults.double(forKey: "change_percent" + item.ticker))
-            
-            let stockModel = StockModel(ticker: item.ticker, name: item.name, linkIcon: item.logo, stockLiveData: stockLiveData)
-            self.mainModuleModel.setStockModel(stockModel, ticker: item.ticker)
-            if self.defaults.bool(forKey: item.ticker) == true {
-                self.addToFavourites(ticker: item.ticker)
-            }
-        }
-        
-
-        
-        for i in 0..<fetchingStocks {
-            let item = mainModuleModel.stocksList[i]
-            
-            self.stockManager.performRequest(with: item.ticker) { stockLiveData, error in
-                if let error = error {
-                    print(error)
-                    return
-                }
-                guard let stockLiveData = stockLiveData else {
-                    return
-                }
-                let stockModel = StockModel(ticker: item.ticker, name: item.name, linkIcon: item.logo, stockLiveData: stockLiveData)
-                if self.defaults.bool(forKey: item.ticker) == true {
-                    stockModel.isFavourite = true
-                }
-
-                self.mainModuleModel.setStockModel(stockModel, ticker: item.ticker)
-                
-                self.defaults.set(stockLiveData.currentPrice, forKey: "current_price_" + item.ticker)
-                self.defaults.set(stockLiveData.change, forKey: "change_" + item.ticker)
-                self.defaults.set(stockLiveData.changePercent, forKey: "change_percent" + item.ticker)
-                
-                
-                
-                DispatchQueue.main.async {
-                    self.updateTable()
-                }
-                
-            }
-        }
+        //DELETE!!!
     }
     
     private func setupView() {
-        mainModuleModel.searchHistoryList = defaults.object(forKey: "searchHistory") as? [String] ?? []
         view = UIView()
         view.backgroundColor = .white
         searchBarView.searchTextField.delegate = self
@@ -250,7 +198,6 @@ final class MainViewController: UIViewController{
     }
     
     
-    
     //MARK: - UI Elements:
     
     private let stockButtonsView: StockButtonsView = {
@@ -266,7 +213,7 @@ final class MainViewController: UIViewController{
     } ()
     
     private lazy var searchView : SearchView = {
-        let search = SearchView(searchHistory: mainModuleModel.searchHistoryList, buttonAction: { string in
+        let search = SearchView(searchHistory: mainViewModel.getSearchHistoryList(), buttonAction: { string in
             self.popularButtonAction(name: string)
         })
         search.translatesAutoresizingMaskIntoConstraints = false
@@ -295,8 +242,8 @@ final class MainViewController: UIViewController{
 
 }
 
-//MARK: - UITextFieldDelegate
 
+//MARK: - UITextFieldDelegate
 
 extension MainViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -329,26 +276,26 @@ extension MainViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let searchText = textField.text else { return }
         
-        mainModuleModel.searchList = []
+        mainViewModel.clearSearchList()
         
         if(searchText == "") {
             currentState = .search
         } else {
             var count = 0;
-            for item in mainModuleModel.stocksList {
+            for item in mainViewModel.getStocksList(for: .stocks) {
                 let ticker = item.ticker.lowercased()
                 let name = item.name.lowercased()
                 var isfound = false
                 if (searchText.count <= ticker.count) {
                     if(searchText.lowercased() == ticker[..<ticker.index(ticker.startIndex, offsetBy: searchText.count)]) {
-                        mainModuleModel.searchList.append(item)
+                        mainViewModel.appendSearchList(stockData: item)
                         isfound = true
                     }
                 }
                 
                 if(searchText.count <= name.count && isfound == false) {
                     if(searchText.lowercased() == name[..<name.index(name.startIndex, offsetBy: searchText.count)]) {
-                        mainModuleModel.searchList.append(item)
+                        mainViewModel.appendSearchList(stockData: item)
                     }
                 }
                 count+=1;
@@ -357,25 +304,23 @@ extension MainViewController: UITextFieldDelegate {
                     break
                 }
             }
-            currentState = .searchStarted
+            currentState = .searchStarted 
         }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text, text != ""{
-            mainModuleModel.addStockToHistory(ticker: text)
+            mainViewModel.addStockToSearchHistory(ticker: text)
         }
-        defaults.set(mainModuleModel.searchHistoryList, forKey: "searchHistory")
-//        defaults.set([], forKey: "searchHistory")
-
-        searchView.updateRequestView(requests: mainModuleModel.searchHistoryList)
+        mainViewModel.uploadSearchHistoryToUserDefaults()
+        
+        searchView.updateRequestView(requests: mainViewModel.getSearchHistoryList())
         
         isEditing = false
         resignFirstResponder()
         self.view.endEditing(true)
         return false
     }
-    
 }
 
 
@@ -389,9 +334,9 @@ extension MainViewController: UITableViewDataSource {
         if (currentState == .stocks) {
             return 30
         } else if (currentState == .favorite){
-            return mainModuleModel.favouriteList.count
+            return mainViewModel.getStocksList(for: .favorite).count
         } else if (currentState == .searchStarted) {
-            return mainModuleModel.searchList.count
+            return mainViewModel.getStocksList(for: .search).count
         } else {
             return 0
         }
@@ -404,22 +349,22 @@ extension MainViewController: UITableViewDataSource {
         
         
         if (currentState == .stocks) {
-            cell.configureCell(stocksList: mainModuleModel.stocksList, index: indexPath.row)
-            let ticker = mainModuleModel.stocksList[indexPath.row].ticker
-            if let stockModel = mainModuleModel.stocksModelDic[ticker] {
+            cell.configureCell(stocksList: mainViewModel.getStocksList(for: .stocks), index: indexPath.row)
+            let ticker = mainViewModel.getStocksList(for: .stocks)[indexPath.row].ticker
+            if let stockModel = mainViewModel.getElementFromStocksDictionary(ticker: ticker) {
                 cell.stockModel = stockModel
             }
         } else if (currentState == .favorite) {
-            cell.configureCell(stocksList: mainModuleModel.favouriteList, index: indexPath.row)
-            let ticker = mainModuleModel.favouriteList[indexPath.row].ticker
-            if let stockModel = mainModuleModel.stocksModelDic[ticker] {
+            cell.configureCell(stocksList: mainViewModel.getStocksList(for: .favorite), index: indexPath.row)
+            let ticker = mainViewModel.getStocksList(for: .favorite)[indexPath.row].ticker
+            if let stockModel = mainViewModel.getElementFromStocksDictionary(ticker: ticker) {
                 cell.stockModel = stockModel
             }
         
         } else if(currentState == .searchStarted) {
-            cell.configureCell(stocksList: mainModuleModel.searchList, index: indexPath.row)
-            let ticker = mainModuleModel.searchList[indexPath.row].ticker
-            if let stockModel = mainModuleModel.stocksModelDic[ticker] {
+            cell.configureCell(stocksList: mainViewModel.getStocksList(for: .search), index: indexPath.row)
+            let ticker = mainViewModel.getStocksList(for: .search)[indexPath.row].ticker
+            if let stockModel = mainViewModel.getElementFromStocksDictionary(ticker: ticker) {
                 cell.stockModel = stockModel
             }
         }
@@ -438,8 +383,6 @@ extension MainViewController: UITableViewDataSource {
      
         return cell
     }
-   
-    
 }
 
 
@@ -447,28 +390,20 @@ extension MainViewController: UITableViewDataSource {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        print(mainModuleModel.stocksList[indexPath.row])
+        print(mainViewModel.getStocksList(for: .stocks)[indexPath.row])
         
         return indexPath
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        var currentTicker: String = ""
+        let currentTicker = mainViewModel.getStocksList(for: currentState)[indexPath.row].ticker
         
-        if(currentState == .stocks) {
-            currentTicker = mainModuleModel.stocksList[indexPath.row].ticker
-        } else if(currentState == .favorite) {
-            currentTicker = mainModuleModel.favouriteList[indexPath.row].ticker
-        } else if(currentState == .searchStarted) {
-            currentTicker = mainModuleModel.searchList[indexPath.row].ticker
-        }
+        guard let currentStockModel = mainViewModel.getElementFromStocksDictionary(ticker: currentTicker) else { return }
         
-        guard let currentStockModel = mainModuleModel.stocksModelDic[currentTicker] else { return }
-        
-        let stockDetailsModel = StockDetailsModel()
+        let stockDetailsModel = StockDetailsModel(currentStockModel: currentStockModel)
         let stockDetailsViewModel = StockDetailsViewModel(stockDetailsModel: stockDetailsModel, stockManager: self.stockManager)
-        let stockDetailsViewController = StockDetailsViewController(stockDetailsViewModel: stockDetailsViewModel, stockModel: currentStockModel, starPressed: { ticker in
+        let stockDetailsViewController = StockDetailsViewController(stockDetailsViewModel: stockDetailsViewModel, starPressed: { ticker in
             if(self.isFavouriteStock(ticker: ticker)) {
                 self.removeFromFavourites(ticker: ticker)
             } else {
@@ -477,9 +412,9 @@ extension MainViewController: UITableViewDelegate {
             self.updateStockTableView()
         })
         stockDetailsViewModel.setStockDetailsView(stockDetailsView: stockDetailsViewController)
-        
         stockDetailsViewController.modalPresentationStyle = .fullScreen
         presentDetail(stockDetailsViewController)
+        
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
@@ -495,56 +430,32 @@ extension MainViewController: UITableViewDelegate {
 extension MainViewController: StockTableViewCellDelegate {
     
     func getStockData(index: Int, currentState: StockTableViewState) -> StockData? {
-        if(currentState == .stocks) {
-            return mainModuleModel.stocksList[index]
-        } else if(currentState == .favorite) {
-            return mainModuleModel.favouriteList[index]
-        } else if(currentState == .searchStarted) {
-            return mainModuleModel.searchList[index]
-        }
-        return nil
+        return mainViewModel.getStockData(index: index, currentState: currentState)
     }
     
     func getStockModel(ticker: String) -> StockModel? {
-        guard let stockModel = mainModuleModel.stocksModelDic[ticker] else { return nil }
-        return stockModel
+        return mainViewModel.getStockModel(ticker: ticker)
     }
     
-    func getCurrentState() -> StockTableViewState {
-        return currentState
-    }
     
     func isFavouriteStock(ticker: String) -> Bool {
-        guard let stockModel = mainModuleModel.stocksModelDic[ticker] else { return false }
-        return stockModel.isFavourite
+        return mainViewModel.isFavouriteStock(ticker: ticker)
     }
     
     func addToFavourites(ticker: String) {
-        guard let stockModel = mainModuleModel.stocksModelDic[ticker] else {
-            return }
-        if mainModuleModel.stocksModelDic[ticker]?.isFavourite == false {
-            mainModuleModel.favouriteList.append(StockData(name: stockModel.name, logo: stockModel.linkIcon, ticker: stockModel.ticker))
-            mainModuleModel.stocksModelDic[ticker]?.isFavourite = true
-        }
-        
-        
-        defaults.set(true, forKey: ticker)
-        
+        mainViewModel.addToFavourites(ticker: ticker)
+        mainViewModel.setFavouriteInUserDefaults(val: true, ticker: ticker)
     }
     
     func removeFromFavourites(ticker: String) {
-        for i in 0..<mainModuleModel.favouriteList.count {
-            if(mainModuleModel.favouriteList[i].ticker==ticker) {
-                mainModuleModel.favouriteList.remove(at: i)
-                mainModuleModel.stocksModelDic[ticker]?.isFavourite = false
-                if(mainModuleModel.favouriteList.count == 0 && currentState == .favorite) {
-                    noElementLabel.isHidden = false
-                }
-                defaults.set(false,  forKey: ticker)
-            return
+        if mainViewModel.removeFromFavourites(ticker: ticker) {
+            
+            mainViewModel.setFavouriteInUserDefaults(val: false, ticker: ticker)
+            
+            if (mainViewModel.getFavouriteListSize() == 0 && currentState == .favorite) {
+                noElementLabel.isHidden = false
             }
         }
-        
     }
     
     func getStockTableViewState() -> StockTableViewState {
@@ -552,7 +463,18 @@ extension MainViewController: StockTableViewCellDelegate {
     }
     
     func updateStockTableView() {
-        updateTable()
+        DispatchQueue.main.async {
+            self.stocksTableView.reloadData()
+        }
     }
 }
   
+extension MainViewController: MainViewModelOutput {
+    
+    func updateTableView() {
+        DispatchQueue.main.async {
+            self.stocksTableView.reloadData()
+        }
+    }
+    
+}

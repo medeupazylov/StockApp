@@ -19,14 +19,13 @@ class StockDetailsViewController: UIViewController {
     private let stockDetailsViewModel: StockDetailsViewModelProvider
     private let constants = Constants()
     
-    private var starPressed: ((String) -> Void)?
+    private let starPressed: ((String) -> Void)?
     
     //MARK: - Lifecycle
     
-    init(stockDetailsViewModel: StockDetailsViewModelProvider, stockModel: StockModel, starPressed: ((String) -> Void)?) {
+    init(stockDetailsViewModel: StockDetailsViewModelProvider, starPressed: ((String) -> Void)?) {
         self.stockDetailsViewModel = stockDetailsViewModel
         self.starPressed = starPressed
-        stockDetailsViewModel.setCurrentStockModel(stockModel: stockModel)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -373,11 +372,13 @@ class StockDetailsViewController: UIViewController {
 extension StockDetailsViewController: StockDetailsViewModelOutput {
     
     func updateGraph(stockGraphData: StockGraphData) {
-        let series = ChartSeries(stockGraphData.closePrices)
-        print(stockGraphData.closePrices.count)
-        series.color = .black
-        self.activityIndicator.stopAnimating()
-        self.stocksChart.add(series)
+        DispatchQueue.main.async {
+            let series = ChartSeries(stockGraphData.closePrices)
+            print(stockGraphData.closePrices.count)
+            series.color = .black
+            self.activityIndicator.stopAnimating()
+            self.stocksChart.add(series)
+        }
     }
     
 }

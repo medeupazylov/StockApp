@@ -1,7 +1,8 @@
-import UIKit
+import Foundation
 
 struct MainModuleModel {
     
+    var defaults = UserDefaults.standard
     var stocksList: [StockData] = []
     var favouriteList: [StockData] = []
     var searchList: [StockData] = []

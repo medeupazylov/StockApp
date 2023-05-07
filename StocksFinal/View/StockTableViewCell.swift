@@ -6,8 +6,6 @@ protocol StockTableViewCellDelegate: AnyObject {
     
     func getStockModel(ticker: String) -> StockModel?
     
-    func getCurrentState() -> StockTableViewState
-    
     func isFavouriteStock(ticker: String) -> Bool
     
     func addToFavourites(ticker: String)
