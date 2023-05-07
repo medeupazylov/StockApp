@@ -1,20 +1,14 @@
 import CoreGraphics
 import UIKit
-enum MontserratFontType {
-    case regular
-    case bold
-    case semibold
+
+enum MontserratFontType: String {
+    case regular = "Montserrat"
+    case bold = "Montserrat-Bold"
+    case semibold = "Montserrat-SemiBold"
 }
 
 class MontserratFont {
     static func makefont(name: MontserratFontType, size: CGFloat)  -> UIFont {
-        switch name {
-        case .regular:
-            return UIFont(name: "Montserrat", size: size)!
-        case .bold:
-            return UIFont(name: "Montserrat-Bold", size: size)!
-        case .semibold:
-            return UIFont(name: "Montserrat-SemiBold", size: size)!
-        }
+        return UIFont(name: name.rawValue, size: size)!
     }
 }

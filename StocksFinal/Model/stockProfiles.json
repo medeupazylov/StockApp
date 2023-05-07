@@ -1,4 +1,8 @@
-[
+[ {
+    "name": "Waters Corp",
+    "logo": "https://finnhub.io/api/logo?symbol=WAT",
+    "ticker": "WAT"
+  },
   {
     "name": "American Airlines Group Inc",
     "logo": "https://finnhub.io/api/logo?symbol=AAL",
@@ -14,11 +18,7 @@
     "logo": "https://finnhub.io/api/logo?symbol=ABBV",
     "ticker": "ABBV"
   },
-  {
-    "name": "ABIOMED Inc",
-    "logo": "https://finnhub.io/api/logo?symbol=ABMD",
-    "ticker": "ABMD"
-  },
+  
   {
     "name": "Abbott Laboratories",
     "logo": "https://finnhub.io/api/logo?symbol=ABT",
@@ -31,7 +31,7 @@
   },
   {
     "name": "Adobe Inc",
-    "logo": "",
+    "logo": "https://finnhub.io/api/logo?symbol=ADBE",
     "ticker": "ADBE"
   },
   {
@@ -48,11 +48,6 @@
     "name": "Aflac Inc",
     "logo": "https://finnhub.io/api/logo?symbol=AFL",
     "ticker": "AFL"
-  },
-  {
-    "name": "Akamai Technologies Inc",
-    "logo": "https://finnhub.io/api/logo?symbol=AKAM",
-    "ticker": "AKAM"
   },
   {
     "name": "Albemarle Corp",
@@ -108,11 +103,6 @@
     "name": "Air Products and Chemicals Inc",
     "logo": "https://finnhub.io/api/logo?symbol=APD",
     "ticker": "APD"
-  },
-  {
-    "name": "Alexandria Real Estate Equities Inc",
-    "logo": "https://finnhub.io/api/logo?symbol=ARE",
-    "ticker": "ARE"
   },
   {
     "name": "Activision Blizzard Inc",
@@ -320,11 +310,6 @@
     "ticker": "BDX"
   },
   {
-    "name": "Brown-Forman Corp",
-    "logo": "",
-    "ticker": "BF.B"
-  },
-  {
     "name": "Biogen Inc",
     "logo": "https://finnhub.io/api/logo?symbol=BIIB",
     "ticker": "BIIB"
@@ -338,11 +323,6 @@
     "name": "Booking Holdings Inc",
     "logo": "https://finnhub.io/api/logo?symbol=BKNG",
     "ticker": "BKNG"
-  },
-  {
-    "name": "BlackRock Inc",
-    "logo": "",
-    "ticker": "BLK"
   },
   {
     "name": "Ball Corp",

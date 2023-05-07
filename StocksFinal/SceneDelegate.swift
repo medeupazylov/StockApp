@@ -14,8 +14,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let winScene = (scene as? UIWindowScene) else { return }
+        let myStockManager = StockManager()
+        let mainModel = MainModuleModel()
+        let mainViewModel = MainViewModel(mainModuleModel: mainModel, stockManager: myStockManager)
+        let mainViewController = MainViewController(stockManager: myStockManager, mainViewModel: mainViewModel)
+        mainViewModel.output = mainViewController
+        
         window = UIWindow(windowScene: winScene)
-        window?.rootViewController = MainViewController()
+        window?.rootViewController = mainViewController
         window?.makeKeyAndVisible()
     }
 
