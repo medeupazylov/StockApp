@@ -150,14 +150,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		DE4B97692952EC7000FB15F4 /* Controller */ = {
+		DE4B97692952EC7000FB15F4 /* MainMVVM */ = {
 			isa = PBXGroup;
 			children = (
 				DE0C5BA12954AA1700D12CDF /* MainViewController.swift */,
 				DEF50D9229B6131400B953FC /* MainModuleModel.swift */,
 				DE6795BD29C8275800D25037 /* MainViewModel.swift */,
 			);
-			path = Controller;
+			path = MainMVVM;
 			sourceTree = "<group>";
 		};
 		DE8D5E62294C6C580018EAAA = {
@@ -181,10 +181,10 @@
 		DE8D5E6D294C6C580018EAAA /* StocksFinal */ = {
 			isa = PBXGroup;
 			children = (
+				DE4B97692952EC7000FB15F4 /* MainMVVM */,
 				DE40D4A329BB44D4007963E2 /* StockDetailsViewMVVM */,
 				DE4B97682952EC6800FB15F4 /* Model */,
 				DE4B97672952EC5300FB15F4 /* View */,
-				DE4B97692952EC7000FB15F4 /* Controller */,
 				DEEFDBA22998F02E0016C695 /* Services */,
 				DE4B975E29523B7600FB15F4 /* Font */,
 				DEEFDBA12998F0010016C695 /* Extensions */,
